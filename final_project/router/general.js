@@ -112,7 +112,7 @@ public_users.get('/title/:title',function (req, res) => {
   
 
 //  Get book review
-public_users.get('/review/:isbn',function (req, res) => {
+public_users.get('/review/:isbn',async (req, res) => {
   const isbn = req.params.isbn;
   await res.send(JSON.stringify(books[isbn].review),null,4);
 });
