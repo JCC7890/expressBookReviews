@@ -8,12 +8,12 @@
     "start": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jason Cross",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.1",
     "express-session": "^1.17.3",
-    "jsonwebtoken": "^8.5.1",
-    "nodemon": "^2.0.19"
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.0.1"
   }
 }
