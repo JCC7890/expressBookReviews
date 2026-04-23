@@ -1,4 +1,4 @@
-   const Axios = require("axios")
+const Axios = require("axios")
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
@@ -72,29 +72,25 @@ public_users.get('/isbn/:isbn', function (req, res) {
   
   
 // Get book details based on author
-public_users.get('/author/:author', function (req, res) {
-    const author = req.params.author;
+public_users.get('/author/:author', async function (req, res) {
+    const author = req.params.author.toLowerCase();
   
-    const booksBasedOnAuthor = (auth) => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const filteredBooks = books.filter((b) => b.author === auth);
-          if (filteredBooks.length > 0) {
-            resolve(filteredBooks);
-          } else {
-            reject(new Error("Book not found"));
-          }
-        }, 900);
-      });
-    };
+    try {
+      const keys = Object.keys(books);
+      const filteredBooks = keys
+        .filter(key => books[key].author.toLowerCase() === author)
+        .map(key => ({ isbn: key, ...books[key] }));
   
-    booksBasedOnAuthor(author)
-      .then((books) => {
-        res.json(books);
-      })
-      .catch((err) => {
-        res.status(400).json({ error: "Book not found" });
-      });
+      if (filteredBooks.length > 0) {
+        // Simulate async delay with a Promise and setTimeout
+        await new Promise(resolve => setTimeout(resolve, 900));
+        res.json(filteredBooks);
+      } else {
+        res.status(404).json({ error: "Book not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred" });
+    }
   });
 
 // Get all books based on title
