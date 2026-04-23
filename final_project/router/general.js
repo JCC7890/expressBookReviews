@@ -1,4 +1,4 @@
-const Axios = require("axios")
+   const Axios = require("axios")
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
@@ -51,7 +51,7 @@ public_users.get('/isbn/:isbn', function (req, res) {
     const booksBasedOnISBN = (ISBN) => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          const book = books.find((b) => b.isbn === ISBN);
+          const book = books[ISBN];  // Access book by key
           if (book) {
             resolve(book);
           } else {
@@ -66,7 +66,7 @@ public_users.get('/isbn/:isbn', function (req, res) {
         res.json(book);
       })
       .catch((err) => {
-        res.status(400).json({ error: "Book not found" });
+        res.status(404).json({ error: "Book not found" });
       });
   });
   
