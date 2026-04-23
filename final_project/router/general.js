@@ -23,25 +23,27 @@ public_users.post("/register", (req, res) => {
     }
   });
 
-// Get the book list available in the shop
-public_users.get('/', function (req, res) {
-    const getBooks = () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(books);
-        }, 900);
-      });
-    };
-  
-    getBooks()
-      .then((books) => {
-        res.json(books);
-      })
-      .catch((err) => {
-        res.status(500).json({ error: "An error has occurred" });
-      });
-  });
 
+// Async function to get books
+const getBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/');
+      return response.data;
+    } catch (error) {
+      throw new Error('Error fetching books');
+    }
+  };
+  
+  // Express route to send books data
+  public_users.get('/', async (req, res) => {
+    try {
+      const books = await getBooks();
+      res.json(books);
+    } catch (err) {
+      res.status(500).json({ error: "An error has occurred" });
+    }
+  });
+  
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
     const ISBN = req.params.isbn;
@@ -132,3 +134,4 @@ public_users.get('/review/:isbn', (req, res) => {
   });
   
   module.exports.general = public_users;
+
